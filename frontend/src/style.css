@@ -46,7 +46,7 @@ a { color: inherit; text-decoration: none; }
 
 .ss-stage {
   flex: 1; display: flex; flex-direction: column;
-  padding: 0.75rem 1rem 0; overflow: hidden;
+  padding: 0.75rem 1rem 0; overflow-y: auto;
 }
 
 h1 { margin: 0 0 0.2rem; font-size: 1.2rem; font-weight: 800; color: var(--ss-ink); }
@@ -146,3 +146,85 @@ th { color: var(--ss-muted); font-weight: 700; font-size: 0.78rem; }
 
 .stall-strip { display: flex; height: 56px; border: 2px solid var(--ss-curb); overflow: hidden; margin: 0.75rem 0; background: #3a3126; }
 .stall-cell { display: flex; align-items: center; justify-content: center; font-size: 0.7rem; border-right: 1px solid rgba(255,255,255,0.08); overflow: hidden; white-space: nowrap; }
+
+/* 主图按米真实刻度绝对定位：未涂色处即空隙 */
+.ss-street-scroll { overflow-x: auto; margin: 0.5rem 0; }
+.ss-street-scale { min-width: 100%; }
+.ss-street-scale .ss-street-band { margin: 0; overflow: visible; }
+.ss-street-inner.ss-abs { display: block; position: relative; min-width: 0; }
+.ss-abs .ss-band-cell { position: absolute; top: 0; bottom: 0; }
+
+/* 余量色带：与分配带同一刻度，逐段对齐未涂色空隙 */
+.ss-margin-strip {
+  position: relative; height: 30px;
+  background: #241f18;
+  border-top: 2px solid #8a7654;
+  border-bottom: 2px solid #8a7654;
+}
+.ss-margin-cell {
+  position: absolute; top: 0; bottom: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.68rem; font-weight: 800; color: #fff;
+  overflow: hidden; white-space: nowrap;
+  border-right: 1px solid rgba(255,255,255,0.25);
+}
+.ss-margin-cell.tier-tight { background: var(--ss-bad); }
+.ss-margin-cell.tier-medium { background: var(--ss-accent); }
+.ss-margin-cell.tier-loose { background: var(--ss-ok); }
+.ss-margin-empty {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem; color: rgba(243,234,212,0.55);
+}
+.ss-margin-legend {
+  display: flex; flex-wrap: wrap; gap: 0.9rem; align-items: center;
+  font-size: 0.72rem; color: var(--ss-muted); margin: 0 0 0.5rem;
+}
+.ss-margin-legend .dot {
+  display: inline-block; width: 10px; height: 10px;
+  border-radius: 2px; margin-right: 4px; vertical-align: -1px;
+}
+.dot.tier-tight { background: var(--ss-bad); }
+.dot.tier-medium { background: var(--ss-accent); }
+.dot.tier-loose { background: var(--ss-ok); }
+
+/* 主图布局：主区 + 余量色档侧栏 */
+.ss-map-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+.ss-map-actions { display: flex; gap: 0.5rem; flex: 0 0 auto; }
+.ss-map-layout { display: flex; gap: 1rem; align-items: flex-start; flex: 1; min-height: 0; }
+.ss-map-main { flex: 1; min-width: 0; }
+.ss-margin-side { flex: 0 0 250px; }
+.ss-margin-side h2 { margin: 0 0 0.2rem; font-size: 0.95rem; }
+.ss-margin-row {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.35rem 0; border-bottom: 1px dashed rgba(92,74,50,0.25);
+  font-size: 0.82rem;
+}
+.ss-margin-range { font-weight: 700; }
+@media (max-width: 900px) {
+  .ss-map-layout { flex-direction: column; }
+  .ss-margin-side { flex: 1 1 auto; width: 100%; }
+}
+
+/* 运行抽屉 */
+.ss-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0;
+  width: min(360px, 92vw); z-index: 40;
+  background: var(--ss-paper);
+  border-left: 3px solid var(--ss-curb);
+  box-shadow: -8px 0 24px rgba(26,20,14,0.35);
+  padding: 1rem; overflow-y: auto;
+  transform: translateX(105%);
+  transition: transform 0.25s ease;
+}
+.ss-drawer.open { transform: translateX(0); }
+.ss-drawer-mask { position: fixed; inset: 0; z-index: 35; background: rgba(26,20,14,0.45); }
+.ss-drawer-head { display: flex; justify-content: space-between; align-items: center; }
+.ss-drawer h2 { margin: 0; font-size: 1rem; }
+.ss-drawer h3 { font-size: 0.85rem; margin: 1rem 0 0.3rem; color: var(--ss-muted); }
+.ss-drawer-stats { display: flex; gap: 1.2rem; margin: 0.5rem 0; font-size: 0.78rem; color: var(--ss-muted); }
+.ss-drawer-stats .stat { display: block; color: var(--ss-ink); }
+.btn-ghost {
+  background: transparent; color: var(--ss-accent);
+  border: 2px solid var(--ss-accent); box-shadow: none;
+}
